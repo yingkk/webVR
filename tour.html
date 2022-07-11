@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<title>krpano - home3</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="x-ua-compatible" content="IE=edge" />
+	<link rel="stylesheet" href="./css/index.css">
+	<script src="./js/jquery-1.11.0.min.js"></script>
+	<style>
+		html {
+			height: 100%;
+		}
+
+		body {
+			height: 100%;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 16px;
+			color: #FFFFFF;
+			background-color: #000000;
+		}
+	</style>
+</head>
+
+<body>
+
+	<script src="tour.js"></script>
+
+	<div id="pano" style="width:100%;height:100%;">
+		<noscript>
+			<table style="width:100%;height:100%;">
+				<tr style="vertical-align:middle;">
+					<td>
+						<div style="text-align:center;">ERROR:<br /><br />Javascript not activated<br /><br /></div>
+					</td>
+				</tr>
+			</table>
+		</noscript>
+		<script>
+			embedpano({ xml: "tour.xml", target: "pano", html5: "only", mobilescale: 1.0, passQueryParameters: "startscene,startlookat" });
+		</script>
+	</div>
+
+	<div class="modal">
+		<div class="modal-container">
+			<div class="modal-container-body">
+				<div class="tabs">
+					<div class="tab-item active">区域信息</div>
+					<div class="tab-item">服务点建设覆盖率TOP</div>
+					<div class="tab-item">助农交易比赛</div>
+				</div>
+				<div class="content tab-item-0">
+					<div class="content-map">
+						<div class="map-img"><img src="./skin/test.jpg"></div>
+					</div>
+					<div class="content-des">
+						<div class="des-item">
+							<span class="des-item-title">城区个数：</span>
+							<span class="des-item-num high-light" id="total">41个</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">城区社区/小微支行个数：</span>
+							<span class="des-item-num high-light">246个</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">县域个数：</span>
+							<span class="des-item-num">70个</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">县域个数/小微支行个数:</span>
+							<span class="des-item-num">269个</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">行政村个数：</span>
+							<span class="des-item-num">14180个</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">服务点个数：</span>
+							<span class="des-item-num">7187个</span>
+						</div>
+					</div>
+				</div>
+				<div class="content tab-item-1">
+					<div class="content-map">
+						<div class="map-img"><img src="./skin/test.jpg"></div>
+					</div>
+					<div class="content-des">
+						<!-- <div class="top-item">
+						<div class="top-no">TOP1</div>
+						<div class="top-title">北海市：</div>
+						<div class="top-progress">
+							<div class="top-progress-inner"></div>
+						</div>
+						<div class="top-percent">79%</div>
+					</div>
+					 -->
+					</div>
+				</div>
+				<div class="content tab-item-2">
+					<div class="content-map">
+						<div class="map-img"><img src="./skin/test.jpg"></div>
+					</div>
+					<div class="content-des">
+						<div class="des-item">
+							<span class="des-item-title">助农终端累计交易比数：</span>
+							<span class="des-item-num high-light">1,220,052</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">移动营业年累计交易比数：</span>
+							<span class="des-item-num high-light">282,300</span>
+						</div>
+						<div class="des-item">
+							<span class="des-item-title">智能柜台交易累计笔数：</span>
+							<span class="des-item-num high-light">794,307</span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-container-close">
+				<div class="close-icon" onclick="closeModal()"><img src="./skin/1poibgclose.png" alt="关闭"></div>
+			</div>
+			<div class="modal-container-date" id="date"></div>
+		</div>
+
+		<div class="modal-mask"></div>
+	</div>
+	<script>
+
+		showCurrentDate()
+
+		$("div[class*=tab-item-]").hide();
+		$(".tabs .tab-item").eq(0).addClass("active");
+		$(".content.tab-item-0").show();
+		$(".tabs .tab-item").click(function () {
+			const index = $(this).index();
+			index ? stopIncrement() : totalNumIncrement();
+			$(".tabs .tab-item").removeClass("active");
+			$(".tabs .tab-item").eq(index).addClass("active");
+			$("div[class*=tab-item-]").hide();
+			$(".content.tab-item-" + index).show();
+		})
+
+		function openModal() {
+			$(".modal").show();
+			totalNumIncrement();
+		}
+
+		function closeModal() {
+			$(".modal").hide();
+		}
+
+		function showCurrentDate() {
+			var date = new Date();
+			var currentDate = '日期：' + date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
+			document.getElementById("date").innerText = currentDate
+		}
+
+		var total = 826;
+		var currentNum = 0;
+		var timer = null;
+		function totalNumIncrement() {
+			timer = setInterval(function () {
+				currentNum += 1;
+				document.getElementById("total").innerText = currentNum
+				if (currentNum === total) {
+					stopIncrement(timer);
+				}
+			})
+		}
+
+		function stopIncrement() {
+			currentNum = 0;
+			clearInterval(timer);
+		}
+
+		buildTop10()
+
+		function buildTop10() {
+			$.ajax({
+				type: 'GET',
+				url: 'https://api.jisuapi.com/area/province',
+				dataType: 'jsonp',
+				success: function (data) {
+					var domStr = "";
+					var datas = [
+						{
+							title: '北海市',
+							percent: '79'
+						},
+						{
+							title: '桂林市',
+							percent: '74'
+						},
+						{
+							title: '南宁市',
+							percent: '71'
+						},
+						{
+							title: '梧州市',
+							percent: '67'
+						},
+						{
+							title: '防城港市',
+							percent: '66'
+						},
+						{
+							title: '贺州市',
+							percent: '65'
+						},
+						{
+							title: '玉林市',
+							percent: '64'
+						},
+						{
+							title: '柳州市',
+							percent: '60'
+						},
+						{
+							title: '钦州市',
+							percent: '58'
+						},
+						{
+							title: '贵港市',
+							percent: '49'
+						}
+					]
+					$.each(datas, function (index, item) {
+						domStr += '<div class="top-item">'
+							+ '<div class="top-no">TOP ' + (index + 1) + '</div>'
+							+ '<div class="top-title">' + item.title + '：</div>'
+							+ '<div class="top-progress">'
+							+ '<div class="top-progress-inner" style="width:' + item.percent + '%"></div>'
+							+ '</div>'
+							+ '<div class="top-percent">' + item.percent + '%</div>'
+							+ '</div>';
+
+					})
+					$('.tab-item-1 .content-des').empty();
+					$('.tab-item-1 .content-des').append(domStr)
+				}
+			})
+
+		}
+
+	</script>
+
+</body>
+
+</html>
